@@ -1,0 +1,19 @@
+---
+layout: archive
+title: "Canal+ Engineering Blog"
+author_profile: false
+header:
+  overlay_color: "#000"
+  overlay_filter: "top, rgba(255,255,255,0) 30%, rgba(255,255,255,0.3) 100%"
+  overlay_image: default_image.jpg
+---
+
+{% include base_path %}
+
+<h3 class="archive__subtitle">Recent Posts</h3>
+
+{% for post in site.posts %}
+  {% include archive-single.html %}
+{% endfor %}
+
+{% include paginator.html %}

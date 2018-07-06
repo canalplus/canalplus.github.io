@@ -1,0 +1,6 @@
+# Jekyll
+Gemfile.lock
+_site/
+
+# JS
+node_modules/

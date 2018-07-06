@@ -1,0 +1,245 @@
+swagger: '2.0'
+info:
+  description: >-
+    Ce micro service est chargé de l'acte d'achat d'un programme. Il permet à
+    l'utilisateur d'obtenir le prix d'un programme, et d'acheter un droit à la
+    consommation.
+  version: beta
+  title: Sell
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: partner-hapi-router01.mg.int.coprod.eu-west-1.aws
+basePath: /
+tags:
+  - name: purchase
+paths:
+  '/sell/price/{contentId}':
+    get:
+      tags:
+        - purchase
+      operationId: getPricesWithoutPeriodEnc
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          type: string
+        - name: functionalType
+          in: query
+          required: false
+          type: string
+        - name: quality
+          in: query
+          required: false
+          type: string
+        - name: drmType
+          in: query
+          required: false
+          type: string
+        - name: comMode
+          in: query
+          required: false
+          type: string
+        - name: distTechnology
+          in: query
+          required: false
+          type: string
+        - name: voucher
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+          headers: {}
+  '/sell/price/{contentId};{revisionEdito};{periodEnc}':
+    get:
+      tags:
+        - purchase
+      operationId: getPricesWithPeriodEnc
+      parameters:
+        - name: contentId
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+        - name: functionalType
+          in: query
+          required: false
+          type: string
+        - name: quality
+          in: query
+          required: false
+          type: string
+        - name: drmType
+          in: query
+          required: false
+          type: string
+        - name: comMode
+          in: query
+          required: false
+          type: string
+        - name: distTechnology
+          in: query
+          required: false
+          type: string
+        - name: voucher
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+          headers: {}
+  /sell/purchase:
+    get:
+      tags:
+        - purchase
+      summary: Récupération des commandes d'un utilisateur
+      description: TO DO
+      operationId: getPurchase
+      parameters:
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    put:
+      tags:
+        - purchase
+      summary: Création d'un purchase
+      description: Une purchaseRequest est nécessaire pour créer le purchase
+      operationId: createPurchase
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/sell/purchase/{purchaseId}':
+    get:
+      tags:
+        - purchase
+      summary: Récupération d'une commande d'un utilisateur
+      description: TO DO
+      operationId: getPurchaseById
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    post:
+      tags:
+        - purchase
+      summary: Validation d'un purchase
+      description: >-
+        Une paymentRequest est nécessaire pour valider la commande, ainsi que
+        l'id de purchase
+      operationId: validatePurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+definitions:
+  Pattern:
+    type: object
+    properties:
+      pattern:
+        type: string
+      flags:
+        type: integer
+        format: int32
+  ActionAnyContent:
+    type: object
+  PassActionAnyContent:
+    type: object
+    properties:
+      action:
+        $ref: '#/definitions/ActionAnyContent'
+      REQUEST_PASS_TOKEN:
+        type: string
+      REQUEST_AUTH_SCHEME:
+        type: string
+      REQUEST_AUTH_PARAM:
+        type: string
+      REQUEST_HEADER_PATTERN:
+        $ref: '#/definitions/Regex'
+      parser:
+        $ref: '#/definitions/BodyParserAnyContent'
+      loggerName:
+        type: string
+      log:
+        $ref: '#/definitions/Logger'
+      logJson:
+        $ref: '#/definitions/Logger'
+  Regex:
+    type: object
+    properties:
+      pattern:
+        $ref: '#/definitions/Pattern'
+      groupNames:
+        type: array
+        items:
+          type: string
+  Logger:
+    type: object
+    properties:
+      logger:
+        $ref: '#/definitions/Logger'
+      underlyingLogger:
+        $ref: '#/definitions/Logger'
+      debugEnabled:
+        type: boolean
+        default: false
+      infoEnabled:
+        type: boolean
+        default: false
+      warnEnabled:
+        type: boolean
+        default: false
+      errorEnabled:
+        type: boolean
+        default: false
+      traceEnabled:
+        type: boolean
+        default: false
+  BodyParserAnyContent:
+    type: object

@@ -1,0 +1,29 @@
+Julien Tanay:
+  name: "Julien Tanay"
+  uri: "http://julientanay.com"
+  email: "julien.tanay@canal-plus.com"
+  bio: "Developer @ Innovation Team"
+  avatar: "avatar_jtanay.jpg"
+  twitter: "Djiit"
+
+Jean-Thierry Bonhomme:
+  name: "Jean-Thierry Bonhomme"
+  email: "jean-thierry.bonhomme@canal-plus.com"
+  avatar: "avatar_default.png"
+
+Filipe Caldas:
+  name: "Filipe Caldas"
+  email: "fcaldas@canal-plus.com"
+  avatar: "avatar_default.png"
+
+Florent Duveau:
+  name: "Florent Duveau"
+  email: "florent.duveau@canal-plus.com"
+  bio: "Craftsman"
+  twitter: "florentduveau"
+  avatar: "avatar_fduveau.jpg"
+
+Sébastien Talasi:
+  name: "Sébastien Talasi"
+  email: "sebastien.talasi@canal-plus.com"
+  avatar: "avatar_default.png"

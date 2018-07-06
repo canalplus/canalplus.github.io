@@ -1,0 +1,407 @@
+swagger: '2.0'
+info:
+  description: |-
+    Ce micro service est chargé de l'api de consommation.
+      Il permet à l'utilisateur d'obtenir un droit à la consommation et d'utiliser ce droit pour consommer son programme.
+  version: beta
+  title: Conso
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: partner-hapi-router01.mg.int.coprod.eu-west-1.aws
+basePath: /
+tags:
+  - name: quota
+  - name: customer
+  - name: view
+paths:
+  /conso/playset:
+    get:
+      tags:
+        - quota
+      summary: Liste de l'état des playsets d'un utilisateur pour un contenu
+      description: >-
+        Ce service permet de tester si les quotas de l'utilisateur permettent la
+        consommation.
+      operationId: userPlaySetsByContentId
+      parameters:
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/playset/{playSetType}':
+    get:
+      tags:
+        - quota
+      summary: >-
+        Liste des playset d'un utilisateur pour un contenu en fonction de leur
+        type
+      description: >-
+        Ce service permet de tester si les quotas de l'utilisateur permettent la
+        consommation par playset.
+      operationId: userPlaySetsByTypeAndContentId
+      parameters:
+        - name: playSetType
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  /conso/quota:
+    get:
+      tags:
+        - quota
+      summary: Récupération de tous les quotas en cours d'un utilisateur
+      description: >-
+        Ce service permet de gérer les quotas associés à la consommation d'un
+        utilisateur.
+      operationId: userQuota
+      parameters:
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/quota/{quotaType}':
+    get:
+      tags:
+        - quota
+      summary: Récupération d'un type de quotas en cours d'un utilisateur
+      description: >-
+        Ce service permet de gérer les quotas associés à la consommation d'un
+        utilisateur.
+      operationId: userQuotaType
+      parameters:
+        - name: quotaType
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/quota/{quotaType}/{contentId}':
+    get:
+      tags:
+        - quota
+      summary: Récupération d'un quota particulier en cours d'un utilisateur
+      description: >-
+        Ce service permet de gérer les quotas associés à la consommation d'un
+        utilisateur.
+      operationId: userQuotaTypeById
+      parameters:
+        - name: quotaType
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  /conso/view:
+    get:
+      tags:
+        - view
+      summary: Récupération des visualisations d'un utilisateur
+      description: TO DO
+      operationId: getUserViews
+      parameters:
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    put:
+      tags:
+        - view
+      summary: Création d'une visualisation
+      description: TO DO
+      operationId: createView
+      parameters:
+        - name: timecode
+          in: query
+          required: false
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/view/{viewId}':
+    post:
+      tags:
+        - view
+      summary: Modification d'une visualisation
+      description: >-
+        Ce service modifie une visualisation, il est utilisé notamment pour
+        marquer la visualisation en stop ou bien modifier son timecode.
+      operationId: action
+      parameters:
+        - name: viewId
+          in: path
+          required: true
+          type: string
+        - name: action
+          in: query
+          required: false
+          type: string
+        - name: timecode
+          in: query
+          required: false
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/view/{viewId}/advert':
+    get:
+      tags:
+        - view
+      summary: Récupération d'une playlist ad-server
+      description: >-
+        Ce service permet de générer une playlist de publicité pour une
+        visualisation.
+      operationId: getAdvert
+      parameters:
+        - name: viewId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/view/{viewId}/licence':
+    post:
+      tags:
+        - view
+      summary: Récupération d'une licence
+      description: >-
+        Ce service permet de générer une licence pour une visualisation et de
+        démarrer une lecture.
+      operationId: postViewByLicence
+      parameters:
+        - name: viewId
+          in: path
+          required: true
+          type: string
+        - name: drmId
+          in: query
+          required: false
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/conso/view/{viewId}/media':
+    get:
+      tags:
+        - view
+      summary: Récupération des informations de medias associées à la visualisation
+      description: >-
+        Ce service permet de récupérer la liste des medias du contenu associés a
+        la visualisation.
+      operationId: getMedia
+      parameters:
+        - name: viewId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/customer/{accountId}/quota':
+    get:
+      tags:
+        - customer
+      summary: TO DO
+      description: TO DO
+      operationId: getQuotasByContentId
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+    delete:
+      tags:
+        - customer
+      summary: TO DO
+      description: TO DO
+      operationId: deleteQuotasByContentId
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/customer/{accountId}/quota/content/{contentId}':
+    get:
+      tags:
+        - customer
+      summary: Detail d'un quota contenu d'un utilisateur
+      description: TO DO
+      operationId: getQuotaContentByContentId
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+    delete:
+      tags:
+        - customer
+      summary: Initialisation d'un quota contenu d'un utilisateur
+      description: TO DO
+      operationId: deleteQuotaContentByContentId
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+definitions:
+  Pattern:
+    type: object
+    properties:
+      pattern:
+        type: string
+      flags:
+        type: integer
+        format: int32
+  ActionAnyContent:
+    type: object
+  PassActionAnyContent:
+    type: object
+    properties:
+      action:
+        $ref: '#/definitions/ActionAnyContent'
+      REQUEST_PASS_TOKEN:
+        type: string
+      REQUEST_AUTH_SCHEME:
+        type: string
+      REQUEST_AUTH_PARAM:
+        type: string
+      REQUEST_HEADER_PATTERN:
+        $ref: '#/definitions/Regex'
+      parser:
+        $ref: '#/definitions/BodyParserAnyContent'
+      loggerName:
+        type: string
+      log:
+        $ref: '#/definitions/Logger'
+      logJson:
+        $ref: '#/definitions/Logger'
+  Regex:
+    type: object
+    properties:
+      pattern:
+        $ref: '#/definitions/Pattern'
+      groupNames:
+        type: array
+        items:
+          type: string
+  Logger:
+    type: object
+    properties:
+      logger:
+        $ref: '#/definitions/Logger'
+      underlyingLogger:
+        $ref: '#/definitions/Logger'
+      traceEnabled:
+        type: boolean
+        default: false
+      debugEnabled:
+        type: boolean
+        default: false
+      infoEnabled:
+        type: boolean
+        default: false
+      warnEnabled:
+        type: boolean
+        default: false
+      errorEnabled:
+        type: boolean
+        default: false
+  BodyParserAnyContent:
+    type: object

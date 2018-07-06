@@ -1,0 +1,24 @@
+# main links links
+main:
+  - title: "OSS"
+    url: /oss/
+
+ # - title: "APIs"
+ #   url: /apis/
+
+  - title: "Blog"
+    url: https://medium.com/canal-tech
+
+  - title: "Jobs"
+    url: http://www.vousmeritezcanalplus.com/
+
+  - title: "Chat with us"
+    url: https://gitter.im/canalplus/developers
+
+blog:
+  - title: More Articles
+    children:
+      # - title: "Posts by Category"
+      #   url: /blog/categories/
+      - title: "Posts by Tag"
+        url: /blog/tags/

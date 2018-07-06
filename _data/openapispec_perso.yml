@@ -1,0 +1,182 @@
+swagger: '2.0'
+info:
+  description: Ce micro service est chargé des données personnalisées pour l'utilisateur.
+  version: beta
+  title: Perso
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: partner-hapi-router01.mg.int.coprod.eu-west-1.aws
+basePath: /
+tags:
+  - name: visualization
+  - name: perso
+paths:
+  '/perso/season/{idKey}/userlist':
+    get:
+      tags:
+        - perso
+      summary: Liste des userlist qui référence un contenu
+      description: TO DO
+      operationId: contentUserLists
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/perso/season/{idKey}/view':
+    get:
+      tags:
+        - visualization
+      summary: Etat des données de visualisation pour un group (brand ou season)
+      description: TO DO
+      operationId: stateVisualizationGroupWithoutPeriodEnc
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/perso/season/{idKey};{revisionEdito};{periodEnc}/view':
+    get:
+      tags:
+        - visualization
+      summary: Etat des données de visualisation pour un group (brand ou season)
+      description: TO DO
+      operationId: stateVisualizationGroupWithPeriodEnc
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/perso/unit/{idKey}/view':
+    get:
+      tags:
+        - visualization
+      summary: Etat des données de visualisation pour un unit
+      description: TO DO
+      operationId: stateVisualizationUnitWithoutPeriodEnc
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/perso/unit/{idKey};{revisionEdito};{periodEnc}/view':
+    get:
+      tags:
+        - visualization
+      summary: Etat des données de visualisation pour un unit
+      description: TO DO
+      operationId: stateVisualizationUnitWithPeriodEnc
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+definitions:
+  Pattern:
+    type: object
+    properties:
+      pattern:
+        type: string
+      flags:
+        type: integer
+        format: int32
+  ActionAnyContent:
+    type: object
+  PassActionAnyContent:
+    type: object
+    properties:
+      action:
+        $ref: '#/definitions/ActionAnyContent'
+      REQUEST_PASS_TOKEN:
+        type: string
+      REQUEST_AUTH_SCHEME:
+        type: string
+      REQUEST_AUTH_PARAM:
+        type: string
+      REQUEST_HEADER_PATTERN:
+        $ref: '#/definitions/Regex'
+      parser:
+        $ref: '#/definitions/BodyParserAnyContent'
+      loggerName:
+        type: string
+      log:
+        $ref: '#/definitions/Logger'
+      logJson:
+        $ref: '#/definitions/Logger'
+  Regex:
+    type: object
+    properties:
+      pattern:
+        $ref: '#/definitions/Pattern'
+      groupNames:
+        type: array
+        items:
+          type: string
+  Logger:
+    type: object
+    properties:
+      logger:
+        $ref: '#/definitions/Logger'
+      underlyingLogger:
+        $ref: '#/definitions/Logger'
+      traceEnabled:
+        type: boolean
+        default: false
+      debugEnabled:
+        type: boolean
+        default: false
+      infoEnabled:
+        type: boolean
+        default: false
+      warnEnabled:
+        type: boolean
+        default: false
+      errorEnabled:
+        type: boolean
+        default: false
+  BodyParserAnyContent:
+    type: object

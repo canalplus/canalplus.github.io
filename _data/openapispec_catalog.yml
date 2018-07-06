@@ -1,0 +1,862 @@
+swagger: '2.0'
+info:
+  description: >-
+    L'objectif de ce service est de permettre à un client de naviguer dans le
+    contenu d'un portail.
+  version: api-v2
+  title: Catalog
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: 'partner-hapi-catalogservicesa01.mg.int.coprod.eu-west-1.aws:9000'
+basePath: /
+tags:
+  - name: content
+paths:
+  '/catalog/channel/{channelId}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getChannel
+      parameters:
+        - name: channelId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/content/{idKey}':
+    get:
+      tags:
+        - content
+      summary: Redirection d'un contenu par id sans object type
+      description: |-
+        WS générique d'appel à un contenu sans savoir quel est son objectType.\n
+                       Impossible d'appeler ce WS avec le header XX-Time-Range.
+      operationId: getRedirectionUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  /catalog/contents:
+    get:
+      tags:
+        - content
+      summary: WS de recherche dans le catalogservices
+      description: >-
+        3 possibilités de recherche: recherche simple avec le queryParam word ou
+        recherche par template avec le queryParam template/templateQuery
+
+        Pour plus d'informations sur la recherche par template:
+        http://vod.canal-bis.com/confluence/display/XWING/Recherche+par+template
+      operationId: searchAsUrl
+      parameters:
+        - name: word
+          in: query
+          required: false
+          type: string
+        - name: template
+          in: query
+          required: false
+          type: string
+        - name: templateQuery
+          in: query
+          required: false
+          type: string
+        - name: args
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  /catalog/list:
+    post:
+      tags:
+        - content
+      summary: Prévisualisation d'une liste
+      description: >-
+        Ce service est destiné à prévisualiser la liste dont la definition est
+        passée dans le body.<br>
+              http://vod.canal-bis.com/confluence/pages/viewpage.action?pageId=18746401#id-/catalog-Prévisualisationd'uneliste.
+                    
+      operationId: resolveList
+      parameters:
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getListRedirectionUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getList
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/contents':
+    get:
+      tags:
+        - content
+      summary: Liste des contenus fils
+      description: >-
+        Ce service permet d'afficher les contenus enfants d'un contenu en
+        fonction de son identifiant.
+      operationId: getListContentsAsUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/filter':
+    get:
+      tags:
+        - content
+      summary: Liste des filtres disponibles sur une liste
+      description: >-
+        Ce service permet d'afficher les filtres disponibles sur une liste
+        (list, collection, starCollection, etc..).
+      operationId: getListFilters
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/member':
+    get:
+      tags:
+        - content
+      summary: Casting d'un contenu
+      description: >-
+        Ce service permet de retourner le casting d'un contenu, le casting
+        correspond à l'association d'une fonction et d'une personnalité.
+      operationId: getMembers
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/member/{function}':
+    get:
+      tags:
+        - content
+      summary: Casting d'un contenu par fonction
+      description: >-
+        Ce service permet de récupérer la liste des members d'un contenu filtré
+        par fonction.
+      operationId: getMembersByFunction
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: function
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/partner':
+    get:
+      tags:
+        - content
+      operationId: getPartners
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/list/{idKey};{revisionEdito}/picture':
+    get:
+      tags:
+        - content
+      operationId: getPicturesList
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/list/{idKey};{revisionEdito}/picture/{type}':
+    get:
+      tags:
+        - content
+      operationId: getPictureTypeList
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: type
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/list/{idKey};{revisionEdito}/sort':
+    get:
+      tags:
+        - content
+      summary: Liste des tris disponibles sur une liste
+      description: >-
+        Ce service permet d'afficher les tris disponibles sur une liste (list,
+        collection, starCollection, etc..).
+      operationId: getListSorts
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/tag':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu
+      description: >-
+        Ce service récupère les tags éditoriaux (genre, ..) ou calculés
+        (SD,HD,..) d'un contenu.
+      operationId: getListTags
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/list/{idKey};{revisionEdito}/tag/{type}':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu filtré par type
+      description: >-
+        Ce service récupère les tags éditoriaux (genre, ..) ou calculés
+        (SD,HD,..) d'un contenu filtré par type.
+      operationId: getListTagsByType
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: type
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/menu/{id}':
+    get:
+      tags:
+        - content
+      summary: Récupération d'un menu
+      description: >-
+        Ce service permet d'afficher les contenus du menu d'un contenu en
+        fonction de son identifiant.
+      operationId: getMenu
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/person/{idKey}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getPersonalityRedirectionUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/person/{idKey};{revisionEdito}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getPersonalityEdito
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/person/{idKey};{revisionEdito}/contents':
+    get:
+      tags:
+        - content
+      summary: Liste des contenus fils
+      description: >-
+        Ce service permet d'afficher les contenus enfants d'un contenu en
+        fonction de son identifiant.
+      operationId: getPersonalityContentsAsUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey}/right':
+    get:
+      tags:
+        - content
+      summary: Droits disponibles d'un contenu unitaire
+      description: TO DO
+      operationId: getRight
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getGroupEdito
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito}/picture':
+    get:
+      tags:
+        - content
+      operationId: getPictures
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/season/{idKey};{revisionEdito}/picture/{type}':
+    get:
+      tags:
+        - content
+      operationId: getPictureByType
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: type
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/season/{idKey};{revisionEdito}/tag':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu
+      description: 'Ce service récupère les tags éditoriaux (genre, ..) d''un contenu.'
+      operationId: getTagsEdito
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito}/tag/{type}':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu filtré par type
+      description: >-
+        Ce service récupère les tags éditoriaux (genre, ..) d'un contenu filtré
+        par type.
+      operationId: getTagsByTypeEdito
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: type
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito};{periodEnc}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getGroup
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito};{periodEnc}/availability':
+    get:
+      tags:
+        - content
+      summary: Liste des disponibilités d'un contenu
+      description: >-
+        Ce service récupère la disponibilité d'un programme sur d'autres
+        services.
+      operationId: getAvailability
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito};{periodEnc}/contents':
+    get:
+      tags:
+        - content
+      summary: Liste des contenus fils
+      description: >-
+        Ce service permet d'afficher les contenus enfants d'un contenu en
+        fonction de son identifiant.
+      operationId: getGroupContentsAsUrl
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revisionEdito};{periodEnc}/tag':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu
+      description: 'Ce service récupère les tags calculés (SD,HD,..) d''un contenu.'
+      operationId: getTagsWithTech
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/season/{idKey};{revision}/related':
+    get:
+      tags:
+        - content
+      summary: Liste des contenus liés
+      description: Ce service permet de lister les contenus lié à un contenu.
+      operationId: getRelatedContents
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revision
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/unit/{idKey};{revisionEdito}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getProductEdito
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/unit/{idKey};{revisionEdito};{periodEnc}':
+    get:
+      tags:
+        - content
+      summary: Détail d'un contenu
+      description: >-
+        Ce service permet d'afficher le détail d'un contenu en fonction de son
+        identifiant et de son type.
+      operationId: getProduct
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/unit/{idKey};{revisionEdito};{periodEnc}/medias':
+    get:
+      tags:
+        - content
+      operationId: getMedias
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+          headers: {}
+  '/catalog/unit/{idKey};{revisionEdito};{periodEnc}/playset':
+    get:
+      tags:
+        - content
+      summary: Liste des options de lecture d'un contenu
+      description: TO DO
+      operationId: getPlayset
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+  '/catalog/unit/{idKey};{revisionEdito};{periodEnc}/tag/{type}':
+    get:
+      tags:
+        - content
+      summary: Liste des tags d'un contenu filtré par type
+      description: >-
+        Ce service récupère les tags calculés (SD,HD,..) d'un contenu filtré par
+        type.
+      operationId: getTagsByTypeWithTech
+      parameters:
+        - name: idKey
+          in: path
+          required: true
+          type: string
+        - name: revisionEdito
+          in: path
+          required: true
+          type: string
+        - name: periodEnc
+          in: path
+          required: true
+          type: string
+        - name: type
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ActionAnyContent'
+definitions:
+  ActionAnyContent:
+    type: object

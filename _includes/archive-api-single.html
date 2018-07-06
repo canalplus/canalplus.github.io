@@ -1,0 +1,13 @@
+{% include base_path %}
+
+<div class="{{ include.type | default: "list" }}__item">
+  <article class="archive__item">
+    <a class="btn btn--large btn--inverse" href="{{ base_path }}{{ post.url }}">{{ post.title }}</a>
+    {% if post.excerpt %}
+      <p class="archive__item-excerpt" itemprop="description">{{ post.excerpt | markdownify | strip_html | truncate: 120 }}</p>
+    {% endif %}
+    {% if post.version %}
+      <p class="archive__item-excerpt page__meta"><strong><i class="fa fa-code-fork" aria-hidden="true"></i> Version: </strong>{{ post.version }}</p>
+    {% endif %}
+  </article>
+</div>

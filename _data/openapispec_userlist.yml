@@ -1,0 +1,278 @@
+swagger: '2.0'
+info:
+  description: >-
+    Ce service permet d'ajouter supprimer des identifiants de contenus dans une
+    liste utilisateur.
+  version: beta
+  title: Userlist
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: partner-hapi-router01.mg.int.coprod.eu-west-1.aws
+basePath: /
+tags:
+  - name: userList
+  - name: userListContent
+paths:
+  /userlist:
+    get:
+      tags:
+        - userList
+      summary: Récupération des userlists d'un utilisateur pour un profile
+      description: >-
+        Ce service permet de récupérer toutes les userlists d'un utilisateur
+        pour un profile particulier.
+      operationId: getUserList
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    delete:
+      tags:
+        - userList
+      summary: Suppression de toutes les userlists d'un utilisateur pour un profile
+      description: Ce service permet de supprimer toutes les userlist d'un utilisateur.
+      operationId: process
+      parameters:
+        - name: listType
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/userlist/{listType}':
+    get:
+      tags:
+        - userList
+      summary: >-
+        Récupération d'une userlist d'un utilisateur pour un profile en fonction
+        de son type
+      description: >-
+        Ce service permet de récupérer une userlist particulière d'un
+        utilisateur pour un profile particulier.
+      operationId: getUserListByType
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+        - name: order
+          in: query
+          required: false
+          type: string
+          default: desc
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    post:
+      tags:
+        - userList
+      summary: >-
+        Ajout d'un ou plusieurs contenu à une userlist d'un utilisateur pour un
+        profile
+      description: >-
+        Ce service permet d'ajouter des contenus à une userlist particulière
+        d'un utilisateur pour un profile particulier.
+      operationId: processPost
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    put:
+      tags:
+        - userList
+      summary: >-
+        Remplacement des contenus d'une userlist d'un utilisateur pour un
+        profile
+      description: >-
+        Ce service permet de remplacer complètement une liste utilisateur par
+        une nouvelle liste de contenus (remplace)
+      operationId: processPut
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+    delete:
+      tags:
+        - userList
+      summary: Suppression d'une userlist d'un utilisateur pour un profile
+      description: >-
+        Ce service permet de supprimer complètement une userlist d'un
+        utilisateur.
+      operationId: processDelete
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/userlist/{listType}/id':
+    get:
+      tags:
+        - userListContent
+      summary: >-
+        Détail des meta-datas d'un contenu d'une userlist d'un utilisateur pour
+        un profile
+      description: >-
+        Ce service permet de visualiser les méta données associées au contenu
+        d'une userlist d'un utilisateur.
+      operationId: userList
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/userlist/{listType}/{contentId}':
+    get:
+      tags:
+        - userList
+      operationId: getUserListProperties
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+          headers: {}
+    put:
+      tags:
+        - userList
+      summary: >-
+        Ajout d'un contenu + meta données à une userlist d'un utilisateur pour
+        un profile
+      description: >-
+        Ce service permet d'ajouter un contenu et les méta-données associées
+        dans une userlist d'un utilisateur.
+      operationId: processProperties
+      parameters:
+        - name: listType
+          in: path
+          required: true
+          type: string
+        - name: contentId
+          in: path
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+definitions:
+  Pattern:
+    type: object
+    properties:
+      pattern:
+        type: string
+      flags:
+        type: integer
+        format: int32
+  ActionAnyContent:
+    type: object
+  PassActionAnyContent:
+    type: object
+    properties:
+      action:
+        $ref: '#/definitions/ActionAnyContent'
+      REQUEST_PASS_TOKEN:
+        type: string
+      REQUEST_AUTH_SCHEME:
+        type: string
+      REQUEST_AUTH_PARAM:
+        type: string
+      REQUEST_HEADER_PATTERN:
+        $ref: '#/definitions/Regex'
+      parser:
+        $ref: '#/definitions/BodyParserAnyContent'
+      loggerName:
+        type: string
+      log:
+        $ref: '#/definitions/Logger'
+      logJson:
+        $ref: '#/definitions/Logger'
+  Regex:
+    type: object
+    properties:
+      pattern:
+        $ref: '#/definitions/Pattern'
+      groupNames:
+        type: array
+        items:
+          type: string
+  Logger:
+    type: object
+    properties:
+      logger:
+        $ref: '#/definitions/Logger'
+      underlyingLogger:
+        $ref: '#/definitions/Logger'
+      traceEnabled:
+        type: boolean
+        default: false
+      debugEnabled:
+        type: boolean
+        default: false
+      infoEnabled:
+        type: boolean
+        default: false
+      warnEnabled:
+        type: boolean
+        default: false
+      errorEnabled:
+        type: boolean
+        default: false
+  BodyParserAnyContent:
+    type: object

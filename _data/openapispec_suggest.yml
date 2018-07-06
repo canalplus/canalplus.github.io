@@ -1,0 +1,149 @@
+swagger: '2.0'
+info:
+  description: |-
+    Ce micro service est chargé des données recommande pour l'utilisateur.
+      Il se base sur le moteur de recommandation suggest.
+  version: beta
+  title: Suggest
+  contact:
+    name: ''
+  license:
+    name: ''
+    url: 'http://licenseUrl'
+host: partner-hapi-router01.mg.int.coprod.eu-west-1.aws
+basePath: /
+tags:
+  - name: suggest
+paths:
+  '/suggest/list/{id}/contents':
+    get:
+      tags:
+        - suggest
+      summary: 'Liste des contenus d''un parent, recommandé pour un utilisateur'
+      description: >-
+        Ce service permet de récupérer une liste de contenus recommandés par
+        Suggest pour un utilisateur (ie profile) dans le contexte d'un objet
+        parent (list, season, brand).
+      operationId: getSuggestList
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/suggest/{idType}':
+    get:
+      tags:
+        - suggest
+      summary: >-
+        Liste des identifiants de contenus recommandés pour un utilisateur et un
+        profile
+      description: >-
+        Ce service permet d'afficher une liste d'identifiants de contenus
+        personnalisées pour l'utilisateur.
+      operationId: getSuggestContentsByAccount
+      parameters:
+        - name: idType
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+  '/suggest/{objectType}/{id}/related':
+    get:
+      tags:
+        - suggest
+      summary: >-
+        Liste des contenus associés à un contenu et recommandé pour un
+        utilisateur
+      description: >-
+        Ce service permet de récupérer une liste de contenus recommandés par
+        Suggest pour un utilisateur (ie profile) à partir d'un contenu donné
+        (mode content to content).
+      operationId: getRelatedContents
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+        - name: objectType
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/PassActionAnyContent'
+definitions:
+  Pattern:
+    type: object
+    properties:
+      pattern:
+        type: string
+      flags:
+        type: integer
+        format: int32
+  ActionAnyContent:
+    type: object
+  PassActionAnyContent:
+    type: object
+    properties:
+      action:
+        $ref: '#/definitions/ActionAnyContent'
+      REQUEST_PASS_TOKEN:
+        type: string
+      REQUEST_AUTH_SCHEME:
+        type: string
+      REQUEST_AUTH_PARAM:
+        type: string
+      REQUEST_HEADER_PATTERN:
+        $ref: '#/definitions/Regex'
+      parser:
+        $ref: '#/definitions/BodyParserAnyContent'
+      loggerName:
+        type: string
+      log:
+        $ref: '#/definitions/Logger'
+      logJson:
+        $ref: '#/definitions/Logger'
+  Regex:
+    type: object
+    properties:
+      pattern:
+        $ref: '#/definitions/Pattern'
+      groupNames:
+        type: array
+        items:
+          type: string
+  Logger:
+    type: object
+    properties:
+      logger:
+        $ref: '#/definitions/Logger'
+      underlyingLogger:
+        $ref: '#/definitions/Logger'
+      traceEnabled:
+        type: boolean
+        default: false
+      debugEnabled:
+        type: boolean
+        default: false
+      infoEnabled:
+        type: boolean
+        default: false
+      warnEnabled:
+        type: boolean
+        default: false
+      errorEnabled:
+        type: boolean
+        default: false
+  BodyParserAnyContent:
+    type: object
