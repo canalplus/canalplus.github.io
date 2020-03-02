@@ -12,8 +12,8 @@ main:
   - title: "Jobs"
     url: http://www.vousmeritezcanalplus.com/
 
-  - title: "Chat with us"
-    url: https://gitter.im/canalplus/developers
+ # - title: "Chat with us"
+ #   url: https://gitter.im/canalplus/developers
 
 blog:
   - title: More Articles
